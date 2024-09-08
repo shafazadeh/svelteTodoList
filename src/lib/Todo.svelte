@@ -1,18 +1,20 @@
 <script lang="ts">
 	import type { ITodo } from '../types/todo';
-
+	import ProtectedRoute from './ProtectedRoute.svelte';
 	export let todo: ITodo;
 	export let toggleCompleted: (id: string) => void;
 	export let removeTodo: (id: string) => void;
 </script>
 
-<li class="todo">
-	<div class="todo-item">
-		<input checked={todo.completed} type="checkbox" on:change={() => toggleCompleted(todo.id)} />
-		<span class="todo-text" class:checked={todo.completed}> {todo.text}</span>
-		<button on:click={() => removeTodo(todo.id)}>Remove</button>
-	</div>
-</li>
+<ProtectedRoute fallback="/login">
+	<li class="todo">
+		<div class="todo-item">
+			<input checked={todo.completed} type="checkbox" on:change={() => toggleCompleted(todo.id)} />
+			<span class="todo-text" class:checked={todo.completed}> {todo.text}</span>
+			<button on:click={() => removeTodo(todo.id)}>Remove</button>
+		</div>
+	</li>
+</ProtectedRoute>
 
 <style>
 	.todo {

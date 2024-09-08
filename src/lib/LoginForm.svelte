@@ -1,13 +1,16 @@
 <script lang="ts">
+     import { setLogin } from './authStore.ts';
 	interface LoginData {
-		email: string;
+		username: string;
 		password: string;
 	}
 
 	let formData: LoginData = {
-		email: '',
+		username: '',
 		password: ''
 	};
+
+	
 
 	let errorMessage = '';
 	let isLoading = false;
@@ -19,24 +22,19 @@
 		errorMessage = '';
 
 		try {
-			const response = await fetch('https://api-nodejs-todolist.herokuapp.com/user/login', {
+			const response = await fetch('https://json-placeholder.mock.beeceptor.com/login', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(formData)
 			});
-			console.log(formData);
 
 			const data = await response.json();
+			console.log(data);
 
-			if (!response.ok) {
-				throw new Error(data.message || 'Login failed');
-			}
+			setLogin(data.token)
 
-			// Handle successful login here
-			console.log('Login successful:', data);
-			// You might want to store the token or redirect to another page
 		} catch (error) {
 			errorMessage = error instanceof Error ? error.message : String(error);
 		} finally {
@@ -53,8 +51,8 @@
 	{/if}
 
 	<div>
-		<label for="email">Email:</label>
-		<input id="email" name="email" type="email" bind:value={formData.email} required />
+		<label for="username">username:</label>
+		<input id="username" name="username" type="text" bind:value={formData.username} required />
 	</div>
 
 	<div>
